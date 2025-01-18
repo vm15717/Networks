@@ -1,4 +1,4 @@
-Implementing Graph/Network Algorithms in C++
+### Implementing Graph/Network Algorithms in C++
 
 1. std::vector representation of a Graph/Network
 2. Breadth first search on a Graph
