@@ -4,8 +4,8 @@ void displaygraph(std::vector <std::vector <int>> &);
 
 int main()
 {
-    int V = 5;
-    std::vector <std::vector <int>> adjmat(5, std::vector <int>(5));
+    int V = 4;
+    std::vector <std::vector <int>> adjmat(V, std::vector <int>(V));
     adjmat[0][1] = 1;
     adjmat[1][0] = 1;
     adjmat[1][2] = 1;
