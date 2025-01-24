@@ -7,8 +7,8 @@ void display(std::vector <std::vector <int>> & );
 void display_degree(std::map <int, int> &);
 void banet(std::vector <std::vector <int>> &, int, int);
 void create_init_network(std::vector <std::vector <int>> &);
-void select_nodes(std::map <int, int> &, int );
-
+std::vector <int> select_nodes(std::map <int, int> &, int );
+int find_node(std::vector <double> &, double);
 int main()
 {
     // Number of nodes in the initial graph
@@ -68,20 +68,28 @@ void banet(std::vector <std::vector <int>> &adjmat, int new_nodes, int links)
         // add a new node 
         std::vector <int> new_rows(adjmat.size(), 0);
         adjmat.push_back(new_rows);   
-        for (int i = 0; i < adjmat.size(); i++)
+        for (int k = 0; k < adjmat.size(); k++)
         {
-            adjmat[i].push_back(0);
+            adjmat[k].push_back(0);
         } 
         std::map <int, int> degree_vec;
         degree(adjmat, degree_vec);
         // select existing nodes
-        select_nodes(degree_vec, links);
+        std::vector <int> selected_nodes = select_nodes(degree_vec, links);
+        for (int j = 0; j < links; j++)
+        {
+            adjmat[adjmat.size()-1][j] = 1;
+            adjmat[j][adjmat.size()-1] = 1;
+        }
     }
 }
 
-void select_nodes(std::map <int, int> &degree_vec, int links)
+std::vector <int> select_nodes(std::map <int, int> &degree_vec, int links)
 {
     std::vector <double> prob_cum;
+    std::random_device rd; 
+    std::mt19937 gen(rd());
+    std::vector <int> selected_nodes;
     double sum = 0.0;
     for (int i = 0; i < degree_vec.size(); i++)
     {
@@ -92,6 +100,21 @@ void select_nodes(std::map <int, int> &degree_vec, int links)
     {
         prob_cum[j] = prob_cum[j]/prob_cum[prob_cum.size()-1];
     }
-    std::random_device rd;
-    std::mt19937 gen(rd());
+    for (int k = 0;k < links; k++)
+    {
+        std::uniform_real_distribution<double> dist(0.0, 1.0);
+        selected_nodes.push_back(find_node(prob_cum, dist(gen)));
+    }
+    return selected_nodes;
+}
+
+int find_node(std::vector <double> &prob_cum, double randval)
+{
+    for (int j = 0; j < prob_cum.size(); j++)
+    {
+        if (randval <= prob_cum[j])
+        {
+            return j;
+        }
+    }
 }
