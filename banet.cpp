@@ -82,8 +82,15 @@ void banet(std::vector <std::vector <int>> &adjmat, int new_nodes, int links)
 void select_nodes(std::map <int, int> &degree_vec, int links)
 {
     std::vector <double> prob_cum;
+    double sum = 0.0;
     for (int i = 0; i < degree_vec.size(); i++)
     {
+        sum+=degree_vec[i];
+        prob_cum.push_back(sum);
+    }
+    for (int j = 0; j < degree_vec.size(); j++)
+    {
+        prob_cum[j] = prob_cum[j]/prob_cum[prob_cum.size()-1];
     }
     std::random_device rd;
     std::mt19937 gen(rd());
