@@ -19,7 +19,7 @@ int main()
     std::vector <std::vector <int>> adjmat(V, std::vector <int>(V, 1));
     create_init_network(adjmat);
     std::map <int, int> degree_vec;
-    int new_nodes = 100;
+    int new_nodes = 1000;
     int links = 3;
     banet(adjmat, new_nodes, links);
     degree(adjmat, degree_vec);
