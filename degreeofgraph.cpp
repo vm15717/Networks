@@ -6,7 +6,7 @@ void display_degree(std::vector <int> &);
 
 int main()
 {
-    int V = 5;
+    int V = 4;
     std::vector <std::vector <int>> adjmat(V, std::vector <int>(V, 0));
     adjmat[0][1] = 1;
     adjmat[1][0] = 1;
