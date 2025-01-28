@@ -6,7 +6,7 @@ void display_sparsematrix(std::vector <int> &, std::vector <int> &);
 
 int main(void)
 {
-    int num_nodes = 3;
+    int num_nodes = 300;
     std::vector <int> row_indices;
     std::vector <int> col_indices;
     // Define the graph
