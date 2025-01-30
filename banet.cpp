@@ -2,6 +2,7 @@
 #include <map>
 #include <random>
 #include <set>
+#include <eigen3/Eigen/Dense>
 
 void degree(std::vector <std::vector <int>> &, std::map <int, int> &);
 void display(std::vector <std::vector <int>> & );
