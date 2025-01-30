@@ -1,6 +1,7 @@
 #include <iostream>
 #include <map>
 #include <random>
+#include <set>
 
 int degree_sum = 0;
 int num_nodes = 0;
@@ -15,6 +16,7 @@ void degree(std::vector <int> &, std::vector <int> &, std::map <int, int> &);
 void display_degree(std::map <int, int> &);
 void banet_create(std::vector <int> &, std::vector <int> &, std::map <int, int> &, int);
 void probsum(std::map <int, int> &, std::vector <double> &);
+int find_node(std::map <int, double> &, double );
 
 int main(void)
 {
@@ -90,12 +92,29 @@ void probsum(std::map <int, int> &degree_map, std::map <int, double> &degree_cum
     } 
 }
 
-void banet_create(std::vector <int> &row_indices, std::vector <int> &col_indices, std::map <int, int> &degree_map, int num_times, int num_links)
+void banet_create(std::map <int, int> &degree_map, std::map <int, double> &prob_cum_sum, int num_times, int num_links)
 {
     std::random_device rd; 
     std::mt19937 gen(rd());
     for (int j = 0; j < num_times; j++)
     {
         std::set <int> selected_nodes;
+        while (selected_nodes.size() != num_links)
+        {
+            std::uniform_real_distribution<double> dist(0.0, 1.0);
+            selected_nodes.insert(find_node(prob_cum_sum, dist(gen)));   
+        }
     }
+}
+
+int find_node(std::map <int, double> &prob_cum_sum, double randval)
+{
+    for (int j = 0; j < prob_cum_sum.size(); j++)
+    {
+        if (randval <= prob_cum_sum[j])
+        {
+            return j;
+        }
+    }
+    return 0;
 }
