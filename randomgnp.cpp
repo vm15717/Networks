@@ -40,7 +40,7 @@ void generate_random(int num_nodes)
 {
     std::random_device rd;
     std::mt19937 gen(rd());
-    for (int i = 0; i < num_nodes; i++)
+    for (int i = 0; i < row_indices.size(); i++)
     {
         std::uniform_real_distribution <double> dist(0.0, 1.1);
         probs.push_back(dist(gen));
@@ -54,12 +54,14 @@ void generate_graph(int num_nodes, double p)
     {
         if (probs[i] < p)
         {
-            row_indices[j++] = row_indices[i];
-            col_indices[j++] = col_indices[i];
-            probs[j++] = probs[i];
+            row_indices[j] = row_indices[i];
+            col_indices[j] = col_indices[i];
+            probs[j] = probs[i];
+            j++;
         }
     }
     row_indices.resize(j);
+    probs.resize(j);
     col_indices.resize(j);
 }
 
