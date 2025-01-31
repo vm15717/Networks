@@ -11,30 +11,30 @@ std::vector <int> col_indices;
 std::map <int, int> degree_map;
 std::map <int, double> degree_cum_sum;
 
-void network_init(std::vector <int> &, std::vector <int> &, std::map <int, int> &, std::map <int, double> &, int);
-void display_graph(std::vector <int> &, std::vector <int> &);
-void degree(std::vector <int> &, std::vector <int> &, std::map <int, int> &);
-void display_degree(std::map <int, int> &);
-void banet_create(std::map <int, int> &, std::map <int, double> &, int, int);
-void probsum(std::map <int, int> &, std::map <int, double> &);
-int find_node(std::map <int, double> &, double );
+void network_init(int);
+void display_graph();
+void degree();
+void display_degree();
+void banet_create(int, int);
+void probsum();
+int find_node(double);
 //void update(std::map <int, int> &, std::map <int, double> &);
 
 int main(void)
 {
-    num_nodes = 4;
-    int num_times = 3;
-    int num_links = 2;
-    network_init(row_indices, col_indices, degree_map, degree_cum_sum, num_nodes);
-    display_graph(row_indices, col_indices);
-    display_degree(degree_map);
-    banet_create( degree_map, degree_cum_sum, num_links, num_links);
-    display_graph(row_indices, col_indices);
+    num_nodes = 10;
+    int num_times = 30;
+    int num_links = 3;
+    network_init(num_nodes);
+    display_graph();
+    display_degree();
+    banet_create(num_times, num_links);
+    display_graph();
+    display_degree();
     return 0;
 }
 
-void network_init(std::vector <int> &row_indices, std::vector <int> &col_indices, std::map <int, int> &degree_map, 
-                    std::map <int, double> &degree_cum_sum, int num_nodes)
+void network_init(int num_nodes)
 {
     for (int i = 0; i < num_nodes; i++)
     {
@@ -48,11 +48,11 @@ void network_init(std::vector <int> &row_indices, std::vector <int> &col_indices
     {
         degree_map[k] = 0;
     }
-    degree(row_indices, col_indices, degree_map);
-    probsum(degree_map, degree_cum_sum);
+    degree();
+    probsum();
 }
 
-void display_graph(std::vector <int> &row_indices, std::vector <int> &col_indices)
+void display_graph()
 {
     if (!row_indices.empty())
     {    
@@ -63,7 +63,7 @@ void display_graph(std::vector <int> &row_indices, std::vector <int> &col_indice
     }
 }
 
-void degree(std::vector <int> &row_indices, std::vector <int> &col_indices, std::map <int, int> &degree_map)
+void degree()
 {
     for (int i = 0; i < row_indices.size(); i++)
     {
@@ -77,7 +77,7 @@ void degree(std::vector <int> &row_indices, std::vector <int> &col_indices, std:
     }
 }
 
-void display_degree(std::map <int, int> &degree_map)
+void display_degree()
 {
     for (const auto &[node, degree]: degree_map)
     {
@@ -85,17 +85,17 @@ void display_degree(std::map <int, int> &degree_map)
     }
 }
 
-void probsum(std::map <int, int> &degree_map, std::map <int, double> &degree_cum_sum)
+void probsum()
 {
     int sum = 0;
     for (const auto &[node, degree]: degree_map)
     {
         sum += degree;
-        degree_cum_sum[node] = sum/degree_sum;
+        degree_cum_sum[node] = sum;
     } 
 }
 
-void banet_create(std::map <int, int> &degree_map, std::map <int, double> &prob_cum_sum, int num_times, int num_links)
+void banet_create(int num_times, int num_links)
 {
     for (int j = 0; j < num_times; j++)
     {
@@ -105,27 +105,31 @@ void banet_create(std::map <int, int> &degree_map, std::map <int, double> &prob_
             std::random_device rd; 
             std::mt19937 gen(rd());
             std::uniform_real_distribution<double> dist(0.0, 1.0);
-            selected_nodes.insert(find_node(prob_cum_sum, dist(gen))); 
+            selected_nodes.insert(find_node(dist(gen))); 
         }
+        degree_map[num_nodes] = 0;
         for (int node:selected_nodes)
         {
             row_indices.push_back(node);
             degree_map[node]++;
+            degree_map[num_nodes]++;
             degree_sum++;
             col_indices.push_back(num_nodes);
         }
+        probsum();
         num_nodes++;
     }
 }
 
-int find_node(std::map <int, double> &prob_cum_sum, double randval)
+int find_node(double randval)
 {
-    for (int j = 0; j < prob_cum_sum.size(); j++)
+    for (int j = 0; j < degree_cum_sum.size(); j++)
     {
-        if (randval <= prob_cum_sum[j])
+        double prob = degree_cum_sum[j]/degree_sum;
+        if (randval <= prob)
         {
             return j;
         }
     }
-    return 0;
+    return degree_cum_sum.size()-1;
 }
