@@ -14,7 +14,7 @@ int main(void)
 {
     int num_nodes = 4;
     double p = 0.3;
-    // all_combs(4);
+    all_combs(4);
     generate_random(4);
     display_graph();
     std::cout << "Random graph: " << std::endl;
@@ -39,7 +39,8 @@ void generate_random(int num_nodes)
 {
     std::random_device rd;
     std::mt19937 gen(rd());
-    for (int i = 0; i < row_indices.size(); i++)
+    int gsize = num_nodes * (num_nodes - 1) / 2;
+    for (int i = 0; i < gsize; i++)
     {
         std::uniform_real_distribution <double> dist(0.0, 1.1);
         probs.push_back(dist(gen));
