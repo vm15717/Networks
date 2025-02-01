@@ -29,6 +29,6 @@ class Banet{
         degree_map[k] = 0;
     }
     degree(row_indices, col_indices, degree_map);
-    probsum(degree_map, degree_cum_sum);
+    cumsum(degree_map, degree_cum_sum);
     }
 };

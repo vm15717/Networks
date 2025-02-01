@@ -10,12 +10,11 @@ std::vector <int> row_indices;
 std::vector <int> col_indices;
 std::vector <double> probs;
 
-
 int main(void)
 {
     int num_nodes = 4;
     double p = 0.3;
-    all_combs(4);
+    // all_combs(4);
     generate_random(4);
     display_graph();
     std::cout << "Random graph: " << std::endl;
@@ -50,7 +49,8 @@ void generate_random(int num_nodes)
 void generate_graph(int num_nodes, double p)
 {
     int j = 0;
-    for (int i = 0; i < row_indices.size(); i++)
+    int gsize = num_nodes * (num_nodes - 1) / 2;
+    for (int i = 0; i < gsize; i++)
     {
         if (probs[i] < p)
         {
