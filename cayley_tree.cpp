@@ -26,7 +26,7 @@ int main()
 
 void createcayley(TreeNode *root, int num_iters, int num_nodes)
 {
-    if (num_iters == 0) return;
+    if (num_iters == 0 || !root) return;
     else
     {
         for (int i = 0; i < num_nodes; i++)
