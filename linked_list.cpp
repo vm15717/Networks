@@ -5,20 +5,19 @@ class Link
 {
     public:
     int val;
-    Link *link;
-    Link(int val) : val(val), link(nullptr) {};
+    Link *next;
+    Link(int val) : val(val), next(nullptr) {};
     void addLink(Link *other)
     {
-        this->link = other;   
+        this->next = other;   
     }
     void removeLink()
     {
-        this->link = nullptr;
+        this->next = nullptr;
     }
 };
 
 
 int main(void)
 {
-
 }
